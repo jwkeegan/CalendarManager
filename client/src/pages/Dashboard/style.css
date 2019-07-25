@@ -1,0 +1,15 @@
+#center-body {
+    border-left: 2px black solid;
+    border-right: 2px black solid;
+    align-content: center;
+}
+
+#left-control {
+    position: absolute;
+    left: 0;
+}
+
+#right-control {
+    position: absolute;
+    right: 0;
+}
