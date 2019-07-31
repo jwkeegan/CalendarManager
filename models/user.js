@@ -7,6 +7,10 @@ const userSchema = new Schema({
         title: String,
         startTime: String,
         endTime: String
+    }],
+    friends: [{
+        username: String,
+        pending: {type: Boolean, default: true}
     }]
 });
 
