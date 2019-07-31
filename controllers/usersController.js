@@ -2,9 +2,9 @@ const db = require("../models");
 
 // Defining methods for the usersContoller
 module.exports = {
-    findByName: function (req, res) {
+    findById: function (req, res) {
         db.User
-            .findOne({ username: req.params.username })
+            .findOne({ _id: req.params.id })
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
     },
@@ -23,7 +23,6 @@ module.exports = {
     remove: function(req, res) {
         db.User
             .findById({ _id: req.params.id })
-            .findById({ _id: req.params.id} )
             .then(dbModel => dbModel.remove())
             .then(dbModel => res.json(dbModel))
             .catch(err => res.status(422).json(err));
