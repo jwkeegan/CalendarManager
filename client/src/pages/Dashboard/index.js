@@ -59,7 +59,7 @@ class Dashboard extends Component {
                     <div className={this.state.panels[0]} id="left-panel">
                         <LeftPanel />
                     </div>
-                    <div className="col" id="center-body">
+                    <div className="col text-center" id="center-body">
                         <button id="left-control" onClick={this.changeLeft}>click</button>
                         <button id="right-control" onClick={this.changeRight}>click</button>
                         <Center />
