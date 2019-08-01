@@ -64,6 +64,7 @@
       </div>
       <!-- <p>Google Calendar API Quickstart</p> -->
       <!-- Add buttons to initiate auth sequence and sign out -->
+      <span id="user-name-holder" data-name="" data-email=""></span>
       <button id="authorize_button" style="display: none;">Sign in With Google</button>
       <button id="signout_button" style="display: none;">Sign Out</button>
     </div>
@@ -131,7 +132,7 @@
       } else {
         authorizeButton.style.display = 'block';
         signoutButton.style.display = 'none';
-        emptyCalendar();
+        handleLogout();
       }
     }
 
@@ -170,6 +171,23 @@
     function handleLogin(userProfile) {
       const userEmail = userProfile.getEmail();
       const userName = userProfile.getName();
+      const userNameHolder = $("#user-name-holder");
+      userNameHolder
+        .attr("data-name", userName)
+        .attr("data-email", userEmail)
+        .text("Signed in as: " + userName);
+      
+      userNameHolder.click();
+    }
+
+    function handleLogout() {
+      const userNameHolder = $("#user-name-holder");
+      userNameHolder
+        .attr("data-name", "")
+        .attr("data-email", "")
+        .text("");
+      emptyCalendar();
+      userNameHolder.click();
     }
 
     /**
@@ -225,6 +243,14 @@
         // }
       });
     }
+
+    /**
+     * Event listener for change in span with id user-name-holder
+     * This triggers a click function which triggers functions inside of React components
+     */
+    // $("#user-name-holder").change(function() {
+    //   $(this).click();
+    // })
 
   </script>
 

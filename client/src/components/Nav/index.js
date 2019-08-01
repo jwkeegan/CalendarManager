@@ -1,10 +1,5 @@
 import React from "react";
-import GoogleLogin from "react-google-login";
 import "./style.css";
-
-const responseGoogle = (response) => {
-    console.log(response);
-}
 
 function Nav() {
     return (
@@ -31,15 +26,9 @@ function Nav() {
                         </li>
                     </ul>
                 </div>
-                <GoogleLogin
-                    clientId="833829714880-39l4uvedjbjinmiakbkhthvmgud63tis.apps.googleusercontent.com"
-                    buttonText="Login"
-                    onSuccess={responseGoogle}
-                    onFailure={responseGoogle}
-                    cookiePolicy={"single_host_origin"}
-                />
-                {/* <button id="authorize_button" style="display: none;">Sign in With Google</button>
-                <button id="signout_button" style="display: none;">Sign Out</button> */}
+                <span id="user-name-holder" data-name="" data-email=""></span>
+                <button id="authorize_button" style={{"display": "none"}}>Sign in With Google</button>
+                <button id="signout_button" style={{"display": "none"}}>Sign Out</button>
             </div>
         </nav>
     );
