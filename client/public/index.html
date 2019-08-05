@@ -227,9 +227,11 @@
         var events = response.result.items;
         console.log("TCL: listUpcomingEvents -> events", events);
         const eventStorage = $("#hidden-div");
+        eventStorage.attr("data-to-store", events.length);
         for (var event in events) {
           let newDiv = $("<div>");
           newDiv
+            .attr("id", "event-" + event)
             .attr("data-title", events[event].summary)
             .attr("data-start-time", events[event].start.date)
             .attr("data-end-time", events[event].end.date);

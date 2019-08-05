@@ -21,15 +21,36 @@ class RightPanel extends Component {
     }
 
     handleLogin = () => {
-        console.log(this.state);
+        let newUser = true;
+        let eventsArray = [];
+        let eventsToLoad = document.getElementById("hidden-div").getAttribute("data-to-store");
+        for (let i = 0; i < eventsToLoad; i++) {
+            let event = document.getElementById("event-" + i);
+            let eventObject = {
+                title: event.getAttribute("data-title"),
+                startTime: event.getAttribute("data-start-time"),
+                endTime: event.getAttribute("data-end-time")
+            };
+            eventsArray.push(eventObject);
+        }
+        console.log(eventsArray);
+
         API.getUsers().then((res) => {
-            console.log(res);
+            for (var user in res.data) {
+                if (res.data[user].email === this.state.email) {
+                    newUser = false;
+                }
+            }
         });
 
-        API.createUser({
-            username: this.state.name,
-            email: this.state.email
-        }).then(res => console.log(res));
+        if (newUser) {
+            API.createUser({
+                username: this.state.name,
+                email: this.state.email,
+                events: eventsArray
+            }).then(res => console.log(res));
+        }
+
     }
 
     render() {

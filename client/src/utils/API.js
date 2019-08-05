@@ -13,12 +13,12 @@ export default {
   getUser: function(email) {
     return axios.get("/api/users/" + email);
   },
-  // Deletes the user with the given id
-  deleteUser: function(id) {
-    return axios.delete("/api/users/" + id);
+  // Deletes the user with the given email
+  deleteUser: function(email) {
+    return axios.delete("/api/users/" + email);
   },
   // Saves a book to the database
-  updateUser: function(id, userData) {
-    return axios.put("/api/books/" + id, userData);
+  updateUser: function(email, userData) {
+    return axios.put("/api/books/" + email, userData);
   }
 };
