@@ -226,7 +226,15 @@
       }).then(function (response) {
         var events = response.result.items;
         console.log("TCL: listUpcomingEvents -> events", events);
-        
+        const eventStorage = $("#hidden-div");
+        for (var event in events) {
+          let newDiv = $("<div>");
+          newDiv
+            .attr("data-title", events[event].summary)
+            .attr("data-start-time", events[event].start.date)
+            .attr("data-end-time", events[event].end.date);
+          eventStorage.append(newDiv);
+        }
         // appendPre('Upcoming events:');
 
         // if (events.length > 0) {
