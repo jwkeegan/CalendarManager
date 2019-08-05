@@ -33,24 +33,52 @@ class RightPanel extends Component {
             };
             eventsArray.push(eventObject);
         }
-        console.log(eventsArray);
 
         API.getUsers().then((res) => {
             for (var user in res.data) {
                 if (res.data[user].email === this.state.email) {
                     newUser = false;
+                    break;
                 }
             }
+
+            if (newUser) {
+                API.createUser({
+                    username: this.state.name,
+                    email: this.state.email,
+                    events: eventsArray
+                }).then(res => this.showUserEvents(res.data));
+            } else {
+                API.getUser(this.state.email)
+                    .then(res => this.showUserEvents(res.data))
+            }
+
         });
 
-        if (newUser) {
-            API.createUser({
-                username: this.state.name,
-                email: this.state.email,
-                events: eventsArray
-            }).then(res => console.log(res));
-        }
+    }
 
+    showUserEvents = (userData) => {
+        let dateToShow = document.getElementById("date").value;
+        console.log(userData);
+        const errorDiv = document.getElementById("error-messages");
+        const eventsDiv = document.getElementById("events-div");
+        if (dateToShow === "") {
+            errorDiv.textContent = "Enter Date";
+        }
+        else if (dateToShow.split("-").length !== 3 ||
+            dateToShow.split("-")[0].length !== 4 ||
+            dateToShow.split("-")[1].length !== 2 ||
+            dateToShow.split("-")[2].length !== 2) {
+            errorDiv.textContent = "Incorrect Date Format";
+        }
+        else {
+            errorDiv.textContent = "";
+            for (var event in userData.events) {
+                if (userData.events[event].startTime === dateToShow) {
+                    eventsDiv.append("<p>" + userData.events[event].title + "</p>");
+                }
+            }
+        }
     }
 
     render() {
@@ -60,12 +88,14 @@ class RightPanel extends Component {
                 <form method="post">
                     <div className="form-group">
                         <label className="control-label" htmlFor="date">Date</label>
-                        <input className="form-control" id="date" name="date" placeholder="MM/DD/YYY" type="text" />
+                        <input className="form-control" id="date" name="date" placeholder="YYYY-MM-DD" type="text" />
                     </div>
                     <div className="form-group">
                         <button className="btn btn-primary " name="submit" type="submit" onClick={this.viewDate}>View Date</button>
                     </div>
                 </form>
+                <div id="error-messages"></div>
+                <div id="events-div"></div>
                 <div id="hidden-div"></div>
             </div>
         );
