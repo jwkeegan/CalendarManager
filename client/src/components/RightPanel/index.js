@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 // import onClickOutside from "react-onclickoutside";
 import API from "../../utils/API";
+import Event from "../Event";
 
 class RightPanel extends Component {
     state = {
         email: "",
-        name: ""
+        name: "",
+        events: []
     };
 
     viewDate = (event) => {
@@ -54,19 +56,20 @@ class RightPanel extends Component {
                     "$set": {
                         events: eventsArray
                     }
-                }).then(res => this.showUserEvents(res.data))
+                }).then(res => this.updateEvents(res.data.events));
             }
 
         });
 
     }
 
-    showUserEvents = (userData) => {
+    updateEvents = (events) => {
+        let newEvents = [];
         let dateToShow = document.getElementById("date").value;
-        console.log(userData);
+        // console.log(events);
         const errorDiv = document.getElementById("error-messages");
-        const eventsDiv = document.getElementById("events-div");
-        eventsDiv.textContent = "";
+        // const eventsDiv = document.getElementById("events-div");
+        // eventsDiv.textContent = "";
         if (dateToShow === "") {
             errorDiv.textContent = "Enter Date";
         }
@@ -78,44 +81,47 @@ class RightPanel extends Component {
         }
         else {
             errorDiv.textContent = "";
-            for (var event in userData.events) {
-                let startTimeSplit = userData.events[event].startTime.split("T");
+            for (var event in events) {
+                let startTimeSplit = events[event].startTime.split("T");
                 if (startTimeSplit[0] === dateToShow) {
-                    console.log("match found");
-                    let timeOfDay = "";
-                    if (startTimeSplit.length > 1) {
-                        timeOfDay = startTimeSplit[1].split("-")[0];
-                        timeOfDay = timeOfDay.split(":").slice(0,2);
-                        if (parseInt(timeOfDay[0]) > 12) {
-                            timeOfDay[0] = parseInt(timeOfDay[0]) - 12;
-                            timeOfDay = timeOfDay.join(":");
-                            timeOfDay += " pm: ";
-                        } else {
-                            timeOfDay = timeOfDay += " am: ";
-                        }
-                    }
-                    eventsDiv.append(timeOfDay + userData.events[event].title);
+                    // console.log("match found");
+                    newEvents.push(events[event]);
                 }
             }
         }
+
+        this.setState({
+            events: newEvents
+        });
     }
 
     render() {
         return (
-            <div className="row text-center">
-                <p>Day View</p>
-                <form method="post">
-                    <div className="form-group">
-                        <label className="control-label" htmlFor="date">Date</label>
-                        <input className="form-control" id="date" name="date" placeholder="YYYY-MM-DD" type="text" />
-                    </div>
-                    <div className="form-group">
-                        <button className="btn btn-primary " name="submit" type="submit" onClick={this.viewDate}>View Date</button>
-                    </div>
-                </form>
-                <div id="error-messages"></div>
-                <div id="events-div"></div>
-                <div id="hidden-div"></div>
+            <div>
+                <div className="row text-center">
+                    <p>Day View</p>
+                    <form method="post">
+                        <div className="form-group">
+                            <label className="control-label" htmlFor="date">Date</label>
+                            <input className="form-control" id="date" name="date" placeholder="YYYY-MM-DD" type="text" />
+                        </div>
+                        <div className="form-group">
+                            <button className="btn btn-primary " name="submit" type="submit" onClick={this.viewDate}>View Date</button>
+                        </div>
+                    </form>
+                    <div id="error-messages"></div>
+                </div>
+                <div className="row">
+                    {this.state.events.map(event => (
+                        <Event
+                            key={event._id}
+                            title={event.title}
+                            startTime={event.startTime}
+                            endTime={event.endTime}
+                        />
+                    ))}
+                    <div id="hidden-div"></div>
+                </div>
             </div>
         );
     }
