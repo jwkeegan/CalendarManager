@@ -233,8 +233,8 @@
           newDiv
             .attr("id", "event-" + event)
             .attr("data-title", events[event].summary)
-            .attr("data-start-time", events[event].start.date)
-            .attr("data-end-time", events[event].end.date);
+            .attr("data-start-time", events[event].start.date || events[event].start.dateTime)
+            .attr("data-end-time", events[event].end.date || events[event].end.dateTime);
           eventStorage.append(newDiv);
         }
         // appendPre('Upcoming events:');

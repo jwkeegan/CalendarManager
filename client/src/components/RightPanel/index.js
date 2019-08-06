@@ -49,8 +49,12 @@ class RightPanel extends Component {
                     events: eventsArray
                 }).then(res => this.showUserEvents(res.data));
             } else {
-                API.getUser(this.state.email)
-                    .then(res => this.showUserEvents(res.data))
+                // console.log(eventsArray);
+                API.updateUser(this.state.email, {
+                    "$set": {
+                        events: eventsArray
+                    }
+                }).then(res => this.showUserEvents(res.data))
             }
 
         });
@@ -62,6 +66,7 @@ class RightPanel extends Component {
         console.log(userData);
         const errorDiv = document.getElementById("error-messages");
         const eventsDiv = document.getElementById("events-div");
+        eventsDiv.textContent = "";
         if (dateToShow === "") {
             errorDiv.textContent = "Enter Date";
         }
@@ -74,8 +79,22 @@ class RightPanel extends Component {
         else {
             errorDiv.textContent = "";
             for (var event in userData.events) {
-                if (userData.events[event].startTime === dateToShow) {
-                    eventsDiv.append("<p>" + userData.events[event].title + "</p>");
+                let startTimeSplit = userData.events[event].startTime.split("T");
+                if (startTimeSplit[0] === dateToShow) {
+                    console.log("match found");
+                    let timeOfDay = "";
+                    if (startTimeSplit.length > 1) {
+                        timeOfDay = startTimeSplit[1].split("-")[0];
+                        timeOfDay = timeOfDay.split(":").slice(0,2);
+                        if (parseInt(timeOfDay[0]) > 12) {
+                            timeOfDay[0] = parseInt(timeOfDay[0]) - 12;
+                            timeOfDay = timeOfDay.join(":");
+                            timeOfDay += " pm: ";
+                        } else {
+                            timeOfDay = timeOfDay += " am: ";
+                        }
+                    }
+                    eventsDiv.append(timeOfDay + userData.events[event].title);
                 }
             }
         }

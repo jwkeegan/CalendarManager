@@ -17,8 +17,8 @@ export default {
   deleteUser: function(email) {
     return axios.delete("/api/users/" + email);
   },
-  // Saves a book to the database
+  // Updates a user in the database
   updateUser: function(email, userData) {
-    return axios.put("/api/books/" + email, userData);
+    return axios.put("/api/users/" + email, userData);
   }
 };
