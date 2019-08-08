@@ -5,7 +5,7 @@ class Center extends Component {
     render() {
         return (
             <div className="row">
-                <p className="text-center">Current Month</p>
+                {/* <p className="text-center" id="test-this">Current Month</p> */}
             </div>
         );
     }

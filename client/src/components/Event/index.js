@@ -19,8 +19,15 @@ function Event(props) {
     return (
         <div>
             <div className="text-center">{props.title}</div>
-            <div>Start Time: {formatTime(props.startTime)}</div>
-            <div>End Time: {formatTime(props.endTime)}</div>
+            {props.startTime.includes("T") ? (
+                <div>
+                    <div>Start Time: {formatTime(props.startTime)}</div>
+                    <div>End Time: {formatTime(props.endTime)}</div>
+                </div>
+            ) : (
+                <div>All day Event</div>             
+            )}
+
         </div>
     )
 }
