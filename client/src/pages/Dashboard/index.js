@@ -183,7 +183,10 @@ class Dashboard extends Component {
             <div className="container-fluid">
                 <div className="row">
                     <div className={this.state.panels[0]} id="left-panel">
-                        <LeftPanel />
+                        <LeftPanel 
+                            friends={this.state.friends}
+                            pending={this.state.pending}
+                        />
                     </div>
                     <div className="col text-center" id="center-body">
                         <button id="left-control" onClick={this.changeLeft}>click</button>

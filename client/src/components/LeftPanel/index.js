@@ -1,32 +1,29 @@
-import React, {Component} from "react";
+import React from "react";
 import Friend from "../Friend";
 
-class LeftPanel extends Component {
-    state = {
-        email: "",
-        name: "",
-        friends: [],
-        pending: []
-    };
-
-    render() {
-        return (
-            <div className="row align-center">
-                <div className="col-lg-12">
-                    <div className="row" id="friends-list">
-                        {this.state.friends.map(friend => (
-                            <Friend 
-                                friend={friend.username}
-                            />
-                        ))}
-                    </div>
-                    <div className="row" id="pending-list">
-
-                    </div>
+function LeftPanel(props) {
+    return (
+        <div className="row align-center">
+            <div className="col-lg-12">
+                <div className="row list" id="friends-list">
+                    <h2>Friends List</h2>
+                    {props.friends.map(friend => (
+                        <Friend
+                            friend={friend.username}
+                        />
+                    ))}
+                </div>
+                <div className="row list" id="pending-list">
+                    <h2>Pending Friends</h2>
+                    {props.pending.map(friend => (
+                        <Friend
+                            friend={friend.username}
+                        />
+                    ))}
                 </div>
             </div>
-        );
-    } 
+        </div>
+    );
 }
 
 export default LeftPanel;
