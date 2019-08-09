@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import API from "../../utils/API";
-import LeftPanel from "../../components/LeftPanel";
+import Friend from "../../components/Friend";
 import Center from "../../components/Center";
 import Event from "../../components/Event";
+import onClickOutside from "react-onclickoutside";
 // import RightPanel from "../../components/RightPanel";
 import "./style.css";
 
@@ -18,6 +19,19 @@ class Dashboard extends Component {
         eventsToView: [],
         friends: [],
         pending: []
+    }
+
+    handleClickOutside = () => {
+        if (document.getElementById("user-name-holder").getAttribute("data-name") !== this.state.username) {
+            this.setState({
+                email: "",
+                name: "",
+                events: [],
+                eventsToView: [],
+                friends: [],
+                pending: []
+            });
+        }
     }
 
     loadProfile = () => {
@@ -62,7 +76,17 @@ class Dashboard extends Component {
                 API.createUser({
                     username: this.state.name,
                     email: this.state.email,
-                    events: eventsArray
+                    events: eventsArray,
+                    friends: [
+                        {
+                            username: "ex 1",
+                            pending: true
+                        },
+                        {
+                            username: "ex 2",
+                            pending: false
+                        }
+                    ]
                 }).then(res => this.updateUser(res.data));
             } else {
                 // console.log(eventsArray);
@@ -183,10 +207,28 @@ class Dashboard extends Component {
             <div className="container-fluid">
                 <div className="row">
                     <div className={this.state.panels[0]} id="left-panel">
-                        <LeftPanel 
+                        <div className="row list" id="friends-list">
+                            <h2>Friends List</h2>
+                            {this.state.friends.map(friend => (
+                                <Friend
+                                    key={friend._id}
+                                    friend={friend.username}
+                                />
+                            ))}
+                        </div>
+                        <div className="row list" id="pending-list">
+                            <h2>Pending Friends</h2>
+                            {this.state.pending.map(friend => (
+                                <Friend
+                                    key={friend._id}
+                                    friend={friend.username}
+                                />
+                            ))}
+                        </div>
+                        {/* <LeftPanel
                             friends={this.state.friends}
                             pending={this.state.pending}
-                        />
+                        /> */}
                     </div>
                     <div className="col text-center" id="center-body">
                         <button id="left-control" onClick={this.changeLeft}>click</button>
@@ -226,4 +268,4 @@ class Dashboard extends Component {
     }
 }
 
-export default Dashboard;
+export default onClickOutside(Dashboard);

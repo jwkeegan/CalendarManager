@@ -189,6 +189,7 @@
         .attr("data-email", "")
         .text("");
       emptyCalendar();
+      // emptyPanels();
       userNameHolder.click();
     }
 
@@ -198,6 +199,11 @@
     function emptyCalendar() {
       $("#center-body").find("iframe").remove();
     }
+
+    /**
+     * Empty both the Left and Right Panels of the web page
+     * 
+     */ 
 
     /**
      * Print the summary and start datetime/date of the next ten events in
