@@ -80,10 +80,12 @@ class Dashboard extends Component {
                     friends: [
                         {
                             username: "ex 1",
+                            email: "123@ex.com",
                             pending: true
                         },
                         {
                             username: "ex 2",
+                            email: "456@ex.com",
                             pending: false
                         }
                     ]

@@ -11,6 +11,7 @@ const userSchema = new Schema({
     }],
     friends: [{
         username: String,
+        email: String,
         pending: {type: Boolean, default: true}
     }]
 });
