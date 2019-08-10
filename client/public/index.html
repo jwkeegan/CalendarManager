@@ -316,6 +316,21 @@
         console.log(endTime);
         let startAMPM = $("#start-am-pm").val();
         let endAMPM = $("#end-am-pm").val();
+        let tempStart = startTime.split(":");
+        let tempEnd = endTime.split(":");
+        console.log("TCL: addEvent -> tempStart", tempStart)
+        console.log("TCL: addEvent -> tempEnd", tempEnd)
+        if (parseInt(tempStart[0]) === 12) {
+          tempStart[0] = "00";
+        }
+        if (parseInt(tempEnd[0]) === 12) {
+          tempEnd[0] = "00";
+        }
+        console.log("TCL: addEvent -> tempStart", tempStart)
+        console.log("TCL: addEvent -> tempEnd", tempEnd)
+        startTime = tempStart.join(":");
+        endTime = tempEnd.join(":");
+
         if (startAMPM === "pm") {
           startTime = add12(startTime);
         }

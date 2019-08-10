@@ -10,8 +10,8 @@ import "./style.css";
 class Dashboard extends Component {
     state = {
         panels: [
-            "col-lg-2 col-md-2",
-            "col-lg-2 col-md-2"
+            "col-lg-2  ",
+            "col-lg-2  "
         ],
         email: "",
         name: "",
@@ -179,7 +179,7 @@ class Dashboard extends Component {
         } else {
             this.setState({
                 panels: [
-                    "col-lg-2 col-md-2",
+                    "col-lg-2  ",
                     this.state.panels[1]
                 ]
             });
@@ -202,7 +202,7 @@ class Dashboard extends Component {
             this.setState({
                 panels: [
                     this.state.panels[0],
-                    "col-lg-2 col-md-2"
+                    "col-lg-2  "
                 ]
             });
             document.getElementById("right-control").textContent = ">";
