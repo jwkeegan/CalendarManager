@@ -78,16 +78,16 @@ class Dashboard extends Component {
                     email: this.state.email,
                     events: eventsArray,
                     friends: [
-                        {
-                            username: "ex 1",
-                            email: "123@ex.com",
-                            // pending: true
-                        },
-                        {
-                            username: "ex 2",
-                            email: "456@ex.com",
-                            // pending: false
-                        }
+                        // {
+                        //     username: "ex 1",
+                        //     email: "123@ex.com",
+                        //     // pending: true
+                        // },
+                        // {
+                        //     username: "ex 2",
+                        //     email: "456@ex.com",
+                        //     // pending: false
+                        // }
                     ]
                 }).then(res => this.updateUser(res.data));
             } else {
