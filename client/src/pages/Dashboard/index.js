@@ -18,7 +18,7 @@ class Dashboard extends Component {
         events: [],
         eventsToView: [],
         friends: [],
-        pending: []
+        // pending: []
     }
 
     handleClickOutside = () => {
@@ -29,13 +29,13 @@ class Dashboard extends Component {
                 events: [],
                 eventsToView: [],
                 friends: [],
-                pending: []
+                // pending: []
             });
         }
     }
 
     loadProfile = () => {
-        console.log("hello");
+        console.log(this.state);
         const curUser = document.getElementById("user-name-holder");
         let newEmail = curUser.getAttribute("data-email");
         let newName = curUser.getAttribute("data-name");
@@ -81,12 +81,12 @@ class Dashboard extends Component {
                         {
                             username: "ex 1",
                             email: "123@ex.com",
-                            pending: true
+                            // pending: true
                         },
                         {
                             username: "ex 2",
                             email: "456@ex.com",
-                            pending: false
+                            // pending: false
                         }
                     ]
                 }).then(res => this.updateUser(res.data));
@@ -105,16 +105,17 @@ class Dashboard extends Component {
 
     updateUser = (userData) => {
         let newEvents = userData.events;
-        let newFriends = [];
-        let newPending = [];
+        // let newFriends = [];
+        // let newPending = [];
 
-        for (let friend in userData.friends) {
-            if (userData.friends[friend].pending) {
-                newPending.push(userData.friends[friend]);
-            } else {
-                newFriends.push(userData.friends[friend]);
-            }
-        }
+        // for (let friend in userData.friends) {
+        //     if (userData.friends[friend].pending) {
+        //         newPending.push(userData.friends[friend]);
+        //     } else {
+        //         newFriends.push(userData.friends[friend]);
+        //     }
+        // }
+
         // let dateToShow = document.getElementById("date").value;
         // // console.log(events);
         // const errorDiv = document.getElementById("error-messages");
@@ -142,8 +143,8 @@ class Dashboard extends Component {
 
         this.setState({
             events: newEvents,
-            friends: newFriends,
-            pending: newPending
+            friends: userData.friends,
+            // pending: newPending
         });
     }
 
@@ -204,28 +205,83 @@ class Dashboard extends Component {
         }
     }
 
+    userSearch = (event) => {
+        event.preventDefault();
+        let query = document.getElementById("add-friend").value;
+        API.getUser(query).then(res => {
+            if (res.data === null || res.data.length) {
+                document.getElementById("search-error").textContent = "Email not registered";
+            } else {
+                document.getElementById("search-error").textContent = "";
+                console.log(res.data);
+                let newFriendArray = res.data.friends;
+                newFriendArray.push({
+                    username: this.state.name,
+                    email: this.state.email,
+                    // pending: false
+                });
+                API.updateUser(query, {
+                    "$set": {
+                        friends: newFriendArray
+                    }
+                });
+                let newFriendUsername = res.data.username;
+                API.getUser(this.state.email).then(res => {
+                    let userFriendArray = res.data.friends;
+                    userFriendArray.push({
+                        username: newFriendUsername,
+                        email: query,
+                        // pending: true
+                    });
+                    API.updateUser(this.state.email, {
+                        "$set": {
+                            friends: userFriendArray
+                        }
+                    }).then(res => this.updateUser(res.data));
+                });
+            }
+        })
+    }
+
     render() {
         return (
             <div className="container-fluid">
                 <div className="row">
                     <div className={this.state.panels[0]} id="left-panel">
-                        <div className="row list" id="friends-list">
+                        <div className="row left-panel" id="friends-list">
                             <h2>Friends List</h2>
                             {this.state.friends.map(friend => (
                                 <Friend
                                     key={friend._id}
                                     friend={friend.username}
+                                    email={friend.email}
+                                    userEmail={this.state.email}
                                 />
                             ))}
                         </div>
-                        <div className="row list" id="pending-list">
+                        {/* <div className="row list" id="pending-list">
                             <h2>Pending Friends</h2>
                             {this.state.pending.map(friend => (
                                 <Friend
                                     key={friend._id}
                                     friend={friend.username}
+                                    email={friend.email}
+                                    userEmail={this.state.email}
                                 />
                             ))}
+                        </div> */}
+                        <div className="row left-panel">
+                            <h2>Add Friend</h2>
+                            <form method="post">
+                                <div className="form-group">
+                                    <label className="control-label" htmlFor="add-friend">Enter Email to search</label>
+                                    <input className="form-control" id="add-friend" name="add-friend" placeholder="example@gmail.com" type="text" />
+                                </div>
+                                <div className="form-group">
+                                    <button className="btn btn-primary " name="submit" type="submit" onClick={this.userSearch}>Search</button>
+                                </div>
+                            </form>
+                            <div id="search-error"></div>
                         </div>
                         {/* <LeftPanel
                             friends={this.state.friends}

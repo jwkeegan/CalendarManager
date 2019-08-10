@@ -55,8 +55,8 @@
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" href="/dashboard">Dashboard</a>
                 <a class="dropdown-item" href="/create">Create Event</a>
-                <a class="dropdown-item" href="/friends">Friends</a>
-                <a class="dropdown-item" href="/profile">Profile</a>
+                <!-- <a class="dropdown-item" href="/friends">Friends</a>
+                <a class="dropdown-item" href="/profile">Profile</a> -->
               </div>
             </div>
           </li>
@@ -65,7 +65,7 @@
 
       <!-- <p>Google Calendar API Quickstart</p> -->
       <!-- Add buttons to initiate auth sequence and sign out -->
-      
+
       <span id="user-name-holder" data-name="" data-email=""></span>
       <button id="authorize_button" style="display: none;">Sign in With Google</button>
       <button id="signout_button" style="display: none;">Sign Out</button>
@@ -84,7 +84,7 @@
 
     // Authorization scopes required by the API; multiple scopes can be
     // included, separated by spaces.
-    var SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
+    var SCOPES = "https://www.googleapis.com/auth/calendar";
 
     var authorizeButton = document.getElementById('authorize_button');
     var signoutButton = document.getElementById('signout_button');
@@ -178,7 +178,7 @@
         .attr("data-name", userName)
         .attr("data-email", userEmail)
         .text("Signed in as: " + userName);
-      
+
       userNameHolder.click();
     }
 
@@ -199,11 +199,6 @@
     function emptyCalendar() {
       $("#center-body").find("iframe").remove();
     }
-
-    /**
-     * Empty both the Left and Right Panels of the web page
-     * 
-     */ 
 
     /**
      * Print the summary and start datetime/date of the next ten events in
@@ -269,6 +264,175 @@
     // $("#user-name-holder").change(function() {
     //   $(this).click();
     // })
+
+    /**
+     * This section handles when a user attempts to add an event on the /create tab
+     * This is handles here because access to the google calendar API is defined above
+     * 
+     */
+    $(document).ready(function () {
+
+      validateEvent = () => {
+        console.log("in validateEvent");
+        let eventErrorDiv = $("#event-error");
+        console.log("TCL: validateEvent -> eventErrorDiv", eventErrorDiv)
+        // grab values from the form
+        let eventDate = $("#date").val();
+        let eventName = $("#event-name").val();
+        let startTime = $("#start-time").val();
+        let endTime = $("#end-time").val();
+        // Check if formats of entries are correct, if not, give an error message
+        let validDate = checkDateFormat(eventDate);
+        if (!validDate) {
+          eventErrorDiv.text("Please enter date in format YYYY-MM-DD");
+          return;
+        }
+        if (eventName === "") {
+          eventErrorDiv.text("Please enter a name for your event");
+          return;
+        }
+        let validStart = checkTimeFormat(startTime);
+        let validEnd = checkTimeFormat(endTime);
+        if (!validStart || !validEnd) {
+          eventErrorDiv.text("Please enter times in format HH:MM");
+          return;
+        }
+        let validEvent = checkTimeDifference(startTime, endTime);
+        if (!validEvent) {
+          eventErrorDiv.text("Start time must be before End time");
+          return;
+        }
+        addEvent($("#user-name-holder").attr("data-email"), [], eventName, eventDate, startTime, endTime);
+      }
+
+      addEvent = (userEmail, friendsInEvent, eventName, eventDate, startTime, endTime) => {
+        console.log(userEmail);
+        console.log(friendsInEvent);
+        console.log(eventName);
+        console.log(eventDate);
+        console.log(startTime);
+        console.log(endTime);
+        let startAMPM = $("#start-am-pm").val();
+        let endAMPM = $("#end-am-pm").val();
+        if (startAMPM === "pm") {
+          startTime = add12(startTime);
+        }
+        if (endAMPM === "pm") {
+          endTime = add12(endTime);
+        }
+
+        startTime = reformatTime(eventDate, startTime);
+        endTime = reformatTime(eventDate, endTime);
+
+        let attendees = [];
+        for (let friend in friendsInEvent) {
+          attendees.push({
+            "email": friendsInEvent[friend].email
+          });
+        }
+
+        let event = {
+          "summary": eventName,
+          "start": {
+            "dateTime": startTime,
+            "timeZone": "America/Chicago"
+          },
+          "end": {
+            "dateTime": endTime,
+            "timeZone": "America/Chicago"
+          },
+          "attendees": attendees
+        };
+
+        console.log(event);
+
+        let request = gapi.client.calendar.events.insert({
+          'calendarId': userEmail,
+          'resource': event
+        });
+
+        request.execute(function (event) {
+          $("#event-error").text("Event '" + eventName + "' added!");
+        });
+
+        // var request = gapi.client.calendar.calendarList.list();
+
+        // request.execute(function (resp) {
+        //   console.log(resp);
+        // });
+      }
+
+      reformatTime = (date, time) => {
+        return date + "T" + time + ":00-05:00";
+      }
+
+      add12 = (time) => {
+        time = time.split(":");
+        let hours = parseInt(time[0]);
+        time[0] = hours + 12;
+        time = time.join(":");
+        return time;
+      }
+
+      checkDateFormat = (date) => {
+        // if no date entered
+        if (date === "") return false;
+        else {
+          let dateSplit = date.split("-");
+          // if first split is not YYYY
+          if (dateSplit[0].length !== 4) return false;
+          // if second split is not MM and from 1-12
+          else if (dateSplit[1].length !== 2 || parseInt(dateSplit[1]) < 1 || parseInt(dateSplit[1]) > 12) return false;
+          // if third split is not DD and from 1-31
+          else if (dateSplit[2].length !== 2 || parseInt(dateSplit[2]) < 1 || parseInt(dateSplit[2]) > 31) return false;
+          // if there aren't exactly 3 splits
+          else if (dateSplit.length !== 3) return false;
+          else return true;
+        }
+      }
+
+      checkTimeFormat = (time) => {
+        // if no time entered
+        if (time === "") return false;
+        else {
+          let timeSplit = time.split(":");
+          if (parseInt(timeSplit[0]) < 10 && timeSplit[0].length === 1) {
+            // if HH is a number less than 10, but is entered as 1 digit (i.e. 9 instead of 09)
+            // add the leading 0 for the user
+            timeSplit[0] = "0" + timeSplit[0];
+          }
+          // if split is not 2 parts
+          if (timeSplit.length !== 2) return false;
+          // if first split is not HH or from 1-12
+          if (timeSplit[0].length !== 2 || parseInt(timeSplit[0]) < 1 || parseInt(timeSplit[0]) > 12) return false;
+          // if second split is not MM or from 00-59
+          if (timeSplit[1].length !== 2 || parseInt(timeSplit[1]) < 0 || parseInt(timeSplit[1]) > 59) return false;
+          else return true;
+        }
+      }
+
+      checkTimeDifference = (start, end) => {
+        let startAMPM = $("#start-am-pm").val();
+        let endAMPM = $("#end-am-pm").val();
+        let startHour = parseInt(start.split(":")[0]);
+        let endHour = parseInt(end.split(":")[0]);
+        // if either start hour is 12, change to 0 to compare correctly against 1 (i.e. 12:05 is before 1:05)
+        if (startHour === 12) startHour = 0;
+        if (endHour === 12) endHour = 0;
+        let startMinute = parseInt(start.split(":")[1]);
+        let endMinute = parseInt(end.split(":")[1]);
+        if (startAMPM === "am" && endAMPM === "pm") return true;
+        if (startAMPM === "pm" && endAMPM === "am") return false;
+        if (startHour < endHour) return true;
+        if (startHour > endHour) return false;
+        if (startMinute < endMinute) return true;
+        if (startMinute >= endMinute) return false;
+        return false;
+      }
+
+      $(document).on("click", "#add-event", validateEvent);
+
+    });
 
   </script>
 

@@ -13,7 +13,11 @@
     position: absolute;
     right: 0;
 }
-
+/* 
 .list {
+    height: 33%;
+} */
+
+.left-panel {
     height: 50%;
 }
