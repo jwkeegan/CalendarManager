@@ -258,7 +258,7 @@ class Dashboard extends Component {
             <div className="container-fluid">
                 <div className="row">
                     <div className={this.state.panels[0]} id="left-panel">
-                        <div className="row overflow-auto" id="friends-list">
+                        <div className="row left-panel" id="friends-list">
                             <h2>Friends List</h2>
                             {this.state.friends ? (
                                 this.state.friends.map(friend => (

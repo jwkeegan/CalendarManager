@@ -23,6 +23,26 @@
     height: 33%;
 } */
 
+#left-panel {
+    width: 100%;
+    padding: 0px;
+}
+
+#right-panel {
+    width: 100%;
+    padding: 0px;
+    margin: 0;
+}
+
+.left-panel {
+    width: 100%;
+    margin: 0;
+}
+
+#day-view-form {
+    margin: 0;
+}
+
 #friends-list {
     position: relative;
     margin-bottom: 20px;
