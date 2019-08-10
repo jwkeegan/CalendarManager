@@ -62,10 +62,10 @@ function Friend(props) {
                 "$set": {
                     friends: userFriendArray
                 }
-            });
+            }).then(() => document.getElementById("page-load").click());
         });
     }
-    
+
     return (
         <div className="friend-display">
             <div className="friend">
@@ -75,7 +75,7 @@ function Friend(props) {
             {/* {checkPending(props.email, props.userEmail) ? (
                 <button onClick={() => confirmFriend(props.email, props.userEmail)}>Confirm</button>
             ) : (<div></div>)} */}
-            
+
         </div>
     )
 }

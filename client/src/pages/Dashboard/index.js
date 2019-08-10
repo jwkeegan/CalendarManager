@@ -104,6 +104,7 @@ class Dashboard extends Component {
     }
 
     updateUser = (userData) => {
+        console.log(userData);
         let newEvents = userData.events;
         // let newFriends = [];
         // let newPending = [];
@@ -213,6 +214,8 @@ class Dashboard extends Component {
         event.preventDefault();
         let query = document.getElementById("add-friend").value;
         API.getUser(query).then(res => {
+            console.log(query);
+            console.log(res.data);
             if (res.data === null || res.data.length) {
                 document.getElementById("search-error").textContent = "Email not registered";
             } else {
@@ -231,7 +234,7 @@ class Dashboard extends Component {
                 });
                 let newFriendUsername = res.data.username;
                 API.getUser(this.state.email).then(res => {
-                    let userFriendArray = res.data.friends;
+                    let userFriendArray = res.data.friends || [];
                     userFriendArray.push({
                         username: newFriendUsername,
                         email: query,
@@ -241,7 +244,10 @@ class Dashboard extends Component {
                         "$set": {
                             friends: userFriendArray
                         }
-                    }).then(res => this.updateUser(res.data));
+                    }).then(res => {
+                        this.updateUser(res.data);
+                        document.getElementById("page-load").click();
+                    });
                 });
             }
         })
@@ -254,14 +260,19 @@ class Dashboard extends Component {
                     <div className={this.state.panels[0]} id="left-panel">
                         <div className="row overflow-auto" id="friends-list">
                             <h2>Friends List</h2>
-                            {this.state.friends.map(friend => (
-                                <Friend
-                                    key={friend._id}
-                                    friend={friend.username}
-                                    email={friend.email}
-                                    userEmail={this.state.email}
-                                />
-                            ))}
+                            {this.state.friends ? (
+                                this.state.friends.map(friend => (
+                                    <Friend
+                                        key={friend._id}
+                                        friend={friend.username}
+                                        email={friend.email}
+                                        userEmail={this.state.email}
+                                    />
+                                ))
+                            ) : (
+                                    <div></div>
+                                )}
+
                         </div>
                         {/* <div className="row list" id="pending-list">
                             <h2>Pending Friends</h2>
@@ -282,7 +293,7 @@ class Dashboard extends Component {
                                     <input className="form-control" id="add-friend" name="add-friend" placeholder="example@gmail.com" type="text" />
                                 </div>
                                 <div className="form-group">
-                                    <button className="btn btn-primary " name="submit" type="submit" onClick={this.userSearch}>Search</button>
+                                    <button className="btn btn-primary " name="submit" type="submit" onClick={this.userSearch}>Add</button>
                                 </div>
                             </form>
                             <div id="search-error"></div>

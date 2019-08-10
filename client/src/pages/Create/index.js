@@ -16,7 +16,6 @@ class Create extends Component {
 
     handleClickOutside = () => {
         let curUserEmail = document.getElementById("user-name-holder").getAttribute("data-email");
-        console.log(curUserEmail);
         if (curUserEmail !== this.state.email && this.state.email !== "") {
             this.setState({
                 email: "",
@@ -27,14 +26,12 @@ class Create extends Component {
                 friendsToView: []
             });
         } else if (curUserEmail !== "") {
-            console.log(this.state.eventsToView);
             this.loadProfile(curUserEmail)
         }
     }
 
     loadProfile = (email) => {
         API.getUser(email).then(res => {
-            console.log(res);
             let friendsArray = this.sortFriends(res.data.friends);
             this.setState({
                 email: res.data.email,
@@ -59,14 +56,12 @@ class Create extends Component {
         event.preventDefault();
         let eventsToLoad = [];
         let dateToShow = document.getElementById("date").value;
-        console.log(dateToShow);
         let eventArray = this.state.events;
         for (let event in eventArray) {
             if (eventArray[event].startTime.split("T")[0] === dateToShow) {
                 eventsToLoad.push(eventArray[event]);
             }
         }
-        console.log(dateToShow);
         this.setState({
             eventsToView: eventsToLoad
         });
@@ -78,11 +73,8 @@ class Create extends Component {
         let friendExists = false;
         let errorDiv = document.getElementById("error-message");
         let friendsToView = this.state.friendsToView;
-        console.log(friendsToView);
         for (let friend in this.state.friends) {
             let curFriend = this.state.friends[friend];
-            console.log(friendToAdd);
-            console.log(curFriend);
             if (curFriend.username === friendToAdd) {
                 friendExists = true;
                 errorDiv.textContent = "";
@@ -92,7 +84,6 @@ class Create extends Component {
                             return event;
                         } else return false;
                     });
-                    console.log(eventsToView);
                     curFriend.events = eventsToView;
                     friendsToView.push(curFriend);
                 }).then(() =>
@@ -176,23 +167,25 @@ class Create extends Component {
                 </div>
                 <div className="row">
                     <div className="col-md-2" id="user-events">
-                        {this.state.eventsToView.length ? (
-                            <h4>Your Schedule</h4>) : (
-                                <div></div>
-                            )}
-                        {this.state.eventsToView.map(event => (
-                            <Event
-                                key={event._id}
-                                title={event.title}
-                                startTime={event.startTime}
-                                endTime={event.endTime}
-                            />
-                        ))}
+                        <h4>Your Schedule</h4>
+                        {this.state.eventsToView.length ?
+                            (this.state.eventsToView.map(event => (
+                                <Event
+                                    key={event._id}
+                                    title={event.title}
+                                    startTime={event.startTime}
+                                    endTime={event.endTime}
+                                />
+                            ))) : (
+                                <div>Nothing on the Schedule</div>
+                            )
+                        }
+
                     </div>
 
                     {this.state.friendsToView.map(friend => (
                         <div className="col-md-2 friend-events" key={friend._id}>
-                            <h4>{friend.username}</h4>
+                            <h4 className="friend-data" data-email={friend.email}>{friend.username}</h4>
                             {friend.events.map(event => (
                                 <Event
                                     key={event._id}
@@ -205,19 +198,15 @@ class Create extends Component {
                     ))}
 
                     <div className="col-md-2" id="add-friend">
-                        {(this.state.eventsToView.length) ? (
-                            <form method="post">
-                                <div className="form-group">
-                                    <label className="control-label" htmlFor="friend">Add Friend to Compare</label>
-                                    <input className="form-control" id="friend" name="friend" placeholder="John Doe" type="text" />
-                                </div>
-                                <div className="form-group">
-                                    <button className="btn btn-primary " name="submit" type="submit" onClick={this.addFriend}>Compare Schedule</button>
-                                </div>
-                            </form>
-                        ) : (
-                                <div></div>
-                            )}
+                        <form method="post">
+                            <div className="form-group">
+                                <label className="control-label" htmlFor="friend">Add Friend to Compare</label>
+                                <input className="form-control" id="friend" name="friend" placeholder="John Doe" type="text" />
+                            </div>
+                            <div className="form-group">
+                                <button className="btn btn-primary " name="submit" type="submit" onClick={this.addFriend}>Compare Schedule</button>
+                            </div>
+                        </form>
                         <div id="error-message"></div>
                     </div>
                 </div>

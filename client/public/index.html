@@ -181,7 +181,7 @@
         .attr("data-email", userEmail)
         .text("Signed in as: " + userName);
 
-      userNameHolder.click();
+      $("#page-load").click();
     }
 
     function handleLogout() {
@@ -304,30 +304,30 @@
           eventErrorDiv.text("Start time must be before End time");
           return;
         }
+
+        let friendsInEvent = [];
+        console.log($(".friend-data").attr("data-email"));
+
+        // $(".friend-data").each(() => {
+        //   console.log($(this).attr("data-email"));
+        //   friendsInEvent.push($(this).attr("data-email"));
+        // });
+        friendsInEvent.push($(".friend-data").attr("data-email"));
+
         addEvent($("#user-name-holder").attr("data-email"), [], eventName, eventDate, startTime, endTime);
       }
 
       addEvent = (userEmail, friendsInEvent, eventName, eventDate, startTime, endTime) => {
-        console.log(userEmail);
-        console.log(friendsInEvent);
-        console.log(eventName);
-        console.log(eventDate);
-        console.log(startTime);
-        console.log(endTime);
         let startAMPM = $("#start-am-pm").val();
         let endAMPM = $("#end-am-pm").val();
         let tempStart = startTime.split(":");
         let tempEnd = endTime.split(":");
-        console.log("TCL: addEvent -> tempStart", tempStart)
-        console.log("TCL: addEvent -> tempEnd", tempEnd)
         if (parseInt(tempStart[0]) === 12) {
           tempStart[0] = "00";
         }
         if (parseInt(tempEnd[0]) === 12) {
           tempEnd[0] = "00";
         }
-        console.log("TCL: addEvent -> tempStart", tempStart)
-        console.log("TCL: addEvent -> tempEnd", tempEnd)
         startTime = tempStart.join(":");
         endTime = tempEnd.join(":");
 
