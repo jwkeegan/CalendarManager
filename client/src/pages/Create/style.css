@@ -1,0 +1,47 @@
+.row {
+    width: 100%;
+}
+
+#create-tab-header {
+    margin: 0px auto 20px;
+    width: 40%;
+}
+
+label {
+    text-align: center;
+    width: 100%;
+}
+
+button {
+    align-content: center;
+}
+
+#add-event {
+    position: absolute;
+    align-content: center;
+    margin: 0 auto;
+    top: 40%;
+    left: 27%;
+}
+
+#view-date {
+    position: absolute;
+    align-content: center;
+    margin: 0 auto;
+    top: 50%;
+    left: 27%;
+    width: 50%;
+}
+
+h4 {
+    font-size: 24px;
+    font-weight: normal;
+    text-align: center;
+}
+
+.event-form-box {
+    border: 1px solid black;
+    border-radius: 5px;
+    margin: 0 2px;
+    align-content: center;
+}

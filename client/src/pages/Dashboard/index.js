@@ -174,7 +174,8 @@ class Dashboard extends Component {
                     "d-none",
                     this.state.panels[1]
                 ]
-            })
+            });
+            document.getElementById("left-control").textContent = ">";
         } else {
             this.setState({
                 panels: [
@@ -182,6 +183,7 @@ class Dashboard extends Component {
                     this.state.panels[1]
                 ]
             });
+            document.getElementById("left-control").textContent = "<";
         }
     }
 
@@ -194,7 +196,8 @@ class Dashboard extends Component {
                     this.state.panels[0],
                     "d-none"
                 ]
-            })
+            });
+            document.getElementById("right-control").textContent = "<";
         } else {
             this.setState({
                 panels: [
@@ -202,6 +205,7 @@ class Dashboard extends Component {
                     "col-lg-2 col-md-2"
                 ]
             });
+            document.getElementById("right-control").textContent = ">";
         }
     }
 
@@ -289,13 +293,13 @@ class Dashboard extends Component {
                         /> */}
                     </div>
                     <div className="col text-center" id="center-body">
-                        <button id="left-control" onClick={this.changeLeft}>click</button>
-                        <button id="right-control" onClick={this.changeRight}>click</button>
+                        <button id="left-control" onClick={this.changeLeft}>&lt;</button>
+                        <button id="right-control" onClick={this.changeRight}>&gt;</button>
                         <p id="page-load" onClick={this.loadProfile}>Click here to load Google Profile</p>
                         <Center />
                     </div>
                     <div className={this.state.panels[1]} id="right-panel">
-                        <div className="row text-center">
+                        <div className="row text-center" id="day-view-form">
                             <h2>Day View</h2>
                             <form method="post">
                                 <div className="form-group">
@@ -321,7 +325,21 @@ class Dashboard extends Component {
                         </div>
                     </div>
                 </div>
-            </div>
+                {/* <nav className="footer">
+                    <ul class="d-flex justify-content-center">
+                        <li>
+                            <a href="https://github.com/jwkeegan/CalendarManager" target="_blank" rel="noopener noreferrer">
+                                <i class="fab fa-github fa-3x"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="dev-wrapper text-center">
+                        <a class="developer" href="https://www.github.com/jwkeegan" target="_blank" rel="noopener noreferrer">
+                            Joe Keegan
+                        </a>
+                    </div>
+                </nav> */}
+            </div >
         );
     }
 }

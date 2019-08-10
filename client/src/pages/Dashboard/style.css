@@ -29,12 +29,61 @@ h2 {
     text-align: center;
     border: 5px solid black;
     margin-bottom: 5px;
+    height: 50px;
 }
 
 #user-search-area {
     height: 30%;
 }
 
+form {
+    width: 100%;
+    margin: 0 10px;
+}
+
+form .form-control {
+    width: 80%;
+    margin: 0 auto;
+}
+
 form .form-group{
     align-content: center;
+}
+
+#day-view-form {
+    margin-bottom: 10px;
+}
+
+#page-load {
+    border: 2px gray solid;
+    border-radius: 5px;
+    width: 40%;
+    align-content: center;
+    margin: 0 auto;
+}
+
+.footer {
+    background-color: #333;
+    border-top: black solid 10px;
+    padding: 20px 0;
+}
+
+.footer * {
+    color: #fff;
+}
+
+nav ul li {
+    line-height: 1.2;
+    list-style-type: none;
+    margin: 0 10px;
+    padding: 6px 5px;
+    padding-left: 0;
+    text-align: center;
+}
+  
+.developer {
+    color: black;
+    display: inline-block;
+    font-weight: 400;
+    margin: 0 8px;  
 }

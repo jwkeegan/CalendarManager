@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import onClickOutside from "react-onclickoutside";
 import API from "../../utils/API";
 import Event from "../../components/Event";
+import "./style.css";
 
 class Create extends Component {
     state = {
@@ -114,19 +115,22 @@ class Create extends Component {
     render() {
         return (
             <div className="container">
+                <div className="row" id="create-tab-header">
+                    <h2>Create New Event</h2>
+                </div>
                 <div className="row">
-                    <div className="col">
+                    <div className="col event-form-box">
                         <form method="post">
                             <div className="form-group">
                                 <label className="control-label" htmlFor="date">Date</label>
                                 <input className="form-control" id="date" name="date" placeholder="YYYY-MM-DD" type="text" />
                             </div>
                             <div className="form-group">
-                                <button className="btn btn-primary " name="submit" type="submit" onClick={this.viewDate}>View Date</button>
+                                <button id="view-date" className="btn btn-primary " name="submit" type="submit" onClick={this.viewDate}>View Date</button>
                             </div>
                         </form>
                     </div>
-                    <div className="col">
+                    <div className="col event-form-box">
                         <form>
                             <div className="form-group">
                                 <label className="control-label" htmlFor="event-name">Event Name</label>
@@ -134,7 +138,7 @@ class Create extends Component {
                             </div>
                         </form>
                     </div>
-                    <div className="col">
+                    <div className="col event-form-box">
                         <form method="post">
                             <div className="form-group">
                                 <label className="control-label" htmlFor="start-time">Start Time</label>
@@ -149,7 +153,7 @@ class Create extends Component {
                             </div>
                         </form>
                     </div>
-                    <div className="col">
+                    <div className="col event-form-box">
                         <form method="post">
                             <div className="form-group">
                                 <label className="control-label" htmlFor="end-time">End Time</label>
@@ -164,7 +168,7 @@ class Create extends Component {
                             </div>
                         </form>
                     </div>
-                    <div className="col">
+                    <div className="col event-form-box">
                         {/* onClick={this.validateEvent} */}
                         <button className="btn btn-primary" id="add-event">Add Event</button>
                         <div id="event-error"></div>
@@ -172,6 +176,10 @@ class Create extends Component {
                 </div>
                 <div className="row">
                     <div className="col-md-2" id="user-events">
+                        {this.state.eventsToView.length ? (
+                            <h4>Your Schedule</h4>) : (
+                                <div></div>
+                            )}
                         {this.state.eventsToView.map(event => (
                             <Event
                                 key={event._id}

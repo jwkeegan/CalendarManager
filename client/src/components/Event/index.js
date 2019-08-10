@@ -1,4 +1,5 @@
 import React from "react";
+import "./style.css";
 
 const formatTime = (time) => {
     time = time.split("T")[1].split(":").slice(0, 2);
@@ -17,17 +18,18 @@ const formatTime = (time) => {
 
 function Event(props) {
     return (
-        <div>
-            <div className="text-center">{props.title}</div>
-            {props.startTime.includes("T") ? (
-                <div>
-                    <div>Start Time: {formatTime(props.startTime)}</div>
-                    <div>End Time: {formatTime(props.endTime)}</div>
-                </div>
-            ) : (
-                <div>All day Event</div>             
-            )}
-
+        <div className="card">
+            <div className="card-body">
+                <div className="text-center card-title" id="friend-name">{props.title}</div>
+                {props.startTime.includes("T") ? (
+                    <ul className="list-group list-group-flush">
+                        <li className="list-group-item">Start Time: {formatTime(props.startTime)}</li>
+                        <li className="list-group-item">End Time: {formatTime(props.endTime)}</li>
+                    </ul>
+                ) : (
+                        <div className="card-text">All day Event</div>
+                    )}
+            </div>
         </div>
     )
 }
