@@ -18,6 +18,23 @@
     height: 33%;
 } */
 
-.left-panel {
-    height: 50%;
+#friends-list {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+h2 {
+    clear: both;
+    width: 100%;
+    text-align: center;
+    border: 5px solid black;
+    margin-bottom: 5px;
+}
+
+#user-search-area {
+    height: 30%;
+}
+
+form .form-group{
+    align-content: center;
 }

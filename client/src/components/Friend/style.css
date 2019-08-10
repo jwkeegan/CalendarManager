@@ -1,7 +1,19 @@
 button {
     float: right;
+    position: relative;
+    border-radius: 2px;
 }
 
-.friend-card {
-    clear: both;
+.friend-display {
+    width: 100%;
+    border: 1px solid black;
+    border-radius: 5px;
+    height: 10%;
+    vertical-align: middle;
+    margin-bottom: 2px;
+    padding: 5px;
+}
+
+.friend {
+    height: auto;
 }

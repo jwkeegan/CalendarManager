@@ -248,7 +248,7 @@ class Dashboard extends Component {
             <div className="container-fluid">
                 <div className="row">
                     <div className={this.state.panels[0]} id="left-panel">
-                        <div className="row left-panel" id="friends-list">
+                        <div className="row overflow-auto" id="friends-list">
                             <h2>Friends List</h2>
                             {this.state.friends.map(friend => (
                                 <Friend
@@ -270,7 +270,7 @@ class Dashboard extends Component {
                                 />
                             ))}
                         </div> */}
-                        <div className="row left-panel">
+                        <div className="row left-panel" id="user-search-area">
                             <h2>Add Friend</h2>
                             <form method="post">
                                 <div className="form-group">
@@ -296,7 +296,7 @@ class Dashboard extends Component {
                     </div>
                     <div className={this.state.panels[1]} id="right-panel">
                         <div className="row text-center">
-                            <p>Day View</p>
+                            <h2>Day View</h2>
                             <form method="post">
                                 <div className="form-group">
                                     <label className="control-label" htmlFor="date">Date</label>

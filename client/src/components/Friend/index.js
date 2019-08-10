@@ -1,5 +1,6 @@
 import React from "react";
 import API from "../../utils/API";
+import "./style.css"
 
 function Friend(props) {
 
@@ -66,12 +67,15 @@ function Friend(props) {
     }
     
     return (
-        <div className="friend-card">
-            <p>{props.friend}</p>
+        <div className="friend-display">
+            <div className="friend">
+                {props.friend}
+                <button onClick={() => deleteFriend(props.email, props.userEmail)}>Delete</button>
+            </div>
             {/* {checkPending(props.email, props.userEmail) ? (
                 <button onClick={() => confirmFriend(props.email, props.userEmail)}>Confirm</button>
             ) : (<div></div>)} */}
-            <button onClick={() => deleteFriend(props.email, props.userEmail)}>Delete</button>
+            
         </div>
     )
 }
